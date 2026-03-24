@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuralSummarizer Pro — AgentHub Marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f9fafb; color: #111827; }
+
+    /* Card */
+    .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; }
+
+    /* Badges */
+    .badge { border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; }
+    .badge-success { background: #dcfce7; color: #15803d; }
+    .badge-warning { background: #fef9c3; color: #a16207; }
+    .badge-error   { background: #fee2e2; color: #dc2626; }
+    .badge-info    { background: #dbeafe; color: #1d4ed8; }
+    .badge-neutral { background: #f3f4f6; color: #374151; }
+
+    /* Buttons */
+    .btn-primary   { background: #2563eb; color: white; border-radius: 8px; padding: 9px 18px; font-size: 14px; font-weight: 500; border: none; cursor: pointer; }
+    .btn-secondary { background: white; border: 1px solid #d1d5db; color: #374151; border-radius: 8px; padding: 9px 18px; font-size: 14px; font-weight: 500; cursor: pointer; }
+
+    /* Sidebar nav */
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; font-size: 14px; text-decoration: none; color: #4b5563; border-radius: 8px; margin-bottom: 2px; }
+    .nav-item:hover { background: #f9fafb; }
+    .nav-item.active { background: #eff6ff; color: #2563eb; font-weight: 600; }
+
+    /* Table */
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: #f9fafb; }
+    th { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; padding: 10px 16px; text-align: left; font-weight: 600; border-bottom: 1px solid #e5e7eb; }
+    td { padding: 13px 16px; font-size: 14px; color: #374151; border-bottom: 1px solid #f3f4f6; }
+    tbody tr:last-child td { border-bottom: none; }
+
+    /* Tab nav */
+    .tab-nav { display: flex; border-bottom: 1px solid #e5e7eb; padding: 0 24px; }
+    .tab-btn { padding: 12px 20px; font-size: 14px; font-weight: 500; color: #6b7280; border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+    .tab-btn.active { color: #2563eb; font-weight: 600; border-bottom-color: #2563eb; }
+    .tab-section { padding: 24px; }
+    .tab-section + .tab-section { border-top: 1px solid #f3f4f6; }
+
+    /* Tag pill */
+    .tag-pill { background: #f3f4f6; color: #374151; border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 500; display: inline-block; }
+
+    /* Progress bar */
+    .progress-track { background: #e5e7eb; border-radius: 999px; height: 6px; flex: 1; overflow: hidden; }
+    .progress-fill  { background: #2563eb; border-radius: 999px; height: 100%; }
+    .progress-fill.green { background: #16a34a; }
+
+    /* Code block */
+    .code-block { background: #0f172a; color: #e2e8f0; font-family: 'Courier New', Courier, monospace; font-size: 13px; line-height: 1.7; padding: 20px; border-radius: 8px; overflow-x: auto; white-space: pre; }
+
+    /* Review card */
+    .review-card { background: #fafafa; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; }
+
+    /* Info row */
+    .info-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 13px; }
+    .info-row + .info-row { border-top: 1px solid #f3f4f6; }
+    .info-label { color: #6b7280; }
+    .info-value { color: #111827; font-weight: 500; }
+
+    /* Metric card */
+    .metric-card { background: white; border: 1px solid #e5e7eb; border-radius: 10px; padding: 18px 20px; }
+    .metric-value { font-size: 28px; font-weight: 700; color: #111827; margin: 4px 0 6px; }
+    .metric-label { font-size: 13px; color: #6b7280; font-weight: 500; }
+
+    /* Section divider label */
+    .tab-title { font-size: 13px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 0 14px; }
+
+    /* Pricing card */
+    .pricing-card { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 22px; }
+
+    /* Star */
+    .star { color: #f59e0b; }
+    .star-empty { color: #d1d5db; }
+  </style>
+</head>
+<body>
+
+<!-- ===================== SIDEBAR ===================== -->
+<aside style="position:fixed;top:0;left:0;width:256px;height:100vh;background:white;border-right:1px solid #e5e7eb;display:flex;flex-direction:column;z-index:100;">
+  <div style="padding:20px;border-bottom:1px solid #e5e7eb;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;background:#2563eb;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;">A</div>
+      <span style="font-size:16px;font-weight:700;color:#111827;">AgentHub</span>
+    </div>
+  </div>
+  <nav style="flex:1;padding:12px 8px;overflow-y:auto;">
+    <a href="dashboard.html"    class="nav-item">📊 Dashboard</a>
+    <a href="marketplace.html"  class="nav-item active">🛒 Marketplace</a>
+    <a href="deployments.html"  class="nav-item">⚡ Deployments</a>
+    <a href="analytics.html"    class="nav-item">📈 Analytics</a>
+    <a href="billing.html"      class="nav-item">💳 Billing</a>
+    <a href="my-agents.html"    class="nav-item">🧩 My Agents</a>
+    <a href="admin.html"        class="nav-item">🛡️ Admin</a>
+  </nav>
+  <div style="padding:16px;border-top:1px solid #e5e7eb;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:36px;height:36px;background:#dbeafe;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#2563eb;">RS</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#111827;">Rahul Singh</div>
+        <span style="font-size:11px;background:#f3e8ff;color:#7e22ce;padding:1px 7px;border-radius:999px;font-weight:500;">Admin</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ===================== TOPBAR ===================== -->
+<header style="position:fixed;top:0;left:256px;right:0;height:64px;background:white;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:99;">
+  <div style="font-size:14px;color:#6b7280;">
+    <a href="marketplace.html" style="color:#6b7280;text-decoration:none;">Marketplace</a>
+    <span style="margin:0 6px;">›</span>
+    <span style="color:#111827;font-weight:500;">NeuralSummarizer Pro</span>
+  </div>
+  <div style="flex:1;max-width:400px;margin:0 40px;">
+    <input type="text" placeholder="Search agents, deployments..." style="width:100%;padding:8px 14px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;color:#374151;background:#f9fafb;outline:none;">
+  </div>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <div style="position:relative;cursor:pointer;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span style="position:absolute;top:-4px;right:-4px;background:#ef4444;color:white;font-size:10px;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;">3</span>
+    </div>
+    <div style="width:36px;height:36px;background:#7c3aed;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:13px;font-weight:600;cursor:pointer;">RS</div>
+  </div>
+</header>
+
+<!-- ===================== MAIN ===================== -->
+<main style="margin-left:256px;margin-top:64px;padding:32px;min-height:calc(100vh - 64px);background:#f9fafb;">
+
+  <!-- ===== PAGE HEADER CARD ===== -->
+  <div class="card" style="padding:28px;margin-bottom:24px;">
+    <div style="display:flex;gap:32px;align-items:flex-start;">
+
+      <!-- Left column -->
+      <div style="flex:1;min-width:0;">
+        <a href="marketplace.html" style="font-size:14px;color:#2563eb;text-decoration:none;font-weight:500;">← Back to Marketplace</a>
+
+        <h1 style="font-size:28px;font-weight:700;color:#111827;margin:10px 0 10px;">NeuralSummarizer Pro</h1>
+
+        <!-- Badge row -->
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+          <span class="badge badge-success">✓ VERIFIED</span>
+          <span class="badge badge-success">PUBLISHED</span>
+          <span class="badge badge-neutral">v2.4.1</span>
+          <span class="badge badge-info">NLP Processing</span>
+        </div>
+
+        <!-- Developer -->
+        <div style="font-size:14px;color:#6b7280;margin-bottom:12px;">
+          by <span style="color:#374151;font-weight:500;">Arjun Mehta</span> · <span style="color:#374151;font-weight:500;">NeuralAI Labs</span>
+        </div>
+
+        <!-- Description -->
+        <p style="font-size:14px;color:#374151;line-height:1.65;margin-bottom:14px;max-width:640px;">
+          Advanced text summarization with state-of-the-art hallucination detection and GDPR-compliant output filtering. Optimized for enterprise document workflows with support for 15+ languages.
+        </p>
+
+        <!-- Tags -->
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <span class="tag-pill">nlp</span>
+          <span class="tag-pill">summarization</span>
+          <span class="tag-pill">gdpr-safe</span>
+          <span class="tag-pill">enterprise</span>
+          <span class="tag-pill">multilingual</span>
+        </div>
+      </div>
+
+      <!-- Right column — Pricing card -->
+      <div style="width:280px;flex-shrink:0;">
+        <div class="pricing-card">
+          <div style="font-size:12px;font-weight:600;color:#1d4ed8;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Pricing</div>
+          <div style="font-size:26px;font-weight:700;color:#1e3a8a;margin-bottom:2px;">ⓒ 0.8 <span style="font-size:14px;font-weight:500;color:#3b82f6;">per request</span></div>
+          <div style="font-size:12px;color:#1d4ed8;background:#bfdbfe;border-radius:6px;padding:4px 10px;display:inline-block;margin:6px 0 4px;font-weight:500;">Model: PER_REQUEST</div>
+          <div style="font-size:13px;color:#1d4ed8;margin-bottom:16px;">~ ⓒ 24 for 30 requests</div>
+
+          <button class="btn-primary" style="width:100%;padding:12px 18px;font-size:15px;font-weight:600;border-radius:9px;margin-bottom:18px;">
+            🚀 Deploy Agent
+          </button>
+
+          <div style="border-top:1px solid #bfdbfe;padding-top:14px;">
+            <div class="info-row" style="border-top:none;">
+              <span class="info-label">Version</span>
+              <span class="info-value">v2.4.1</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Last Updated</span>
+              <span class="info-value">Mar 18, 2026</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Uptime</span>
+              <span class="info-value" style="color:#15803d;">99.97%</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Total Deployments</span>
+              <span class="info-value">8,420</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== TABS CARD ===== -->
+  <div class="card" style="padding:0;overflow:hidden;">
+
+    <!-- Tab nav -->
+    <div class="tab-nav">
+      <button class="tab-btn">Overview</button>
+      <button class="tab-btn active">Metrics ●</button>
+      <button class="tab-btn">API Docs</button>
+      <button class="tab-btn">Reviews</button>
+    </div>
+
+    <!-- ---- OVERVIEW TAB ---- -->
+    <div class="tab-section">
+      <div class="tab-title">Overview</div>
+
+      <p style="font-size:14px;color:#374151;line-height:1.7;margin-bottom:20px;max-width:700px;">
+        Advanced text summarization with state-of-the-art hallucination detection and GDPR-compliant output filtering. Optimized for enterprise document workflows with support for 15+ languages. The model leverages transformer-based architecture trained on diverse multilingual corpora with specialized fine-tuning for enterprise use cases including legal, financial, and medical documents.
+      </p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:640px;margin-bottom:20px;">
+        <div>
+          <div style="font-size:12px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;margin-bottom:4px;">Category</div>
+          <div style="font-size:14px;color:#111827;font-weight:500;">NLP Processing</div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;margin-bottom:4px;">Developer</div>
+          <div style="font-size:14px;color:#111827;font-weight:500;">Arjun Mehta, NeuralAI Labs</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <div style="font-size:12px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;margin-bottom:8px;">Tags</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <span class="tag-pill">nlp</span>
+          <span class="tag-pill">summarization</span>
+          <span class="tag-pill">gdpr-safe</span>
+          <span class="tag-pill">enterprise</span>
+          <span class="tag-pill">multilingual</span>
+        </div>
+      </div>
+
+      <!-- Pricing breakdown table -->
+      <div>
+        <div style="font-size:12px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;margin-bottom:10px;">Pricing Breakdown</div>
+        <div style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;max-width:480px;">
+          <table>
+            <thead>
+              <tr>
+                <th style="background:#f9fafb;">Tier</th>
+                <th style="background:#f9fafb;">Rate</th>
+                <th style="background:#f9fafb;">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:500;">Per Request</td>
+                <td><span style="font-weight:600;color:#1d4ed8;">ⓒ 0.8</span></td>
+                <td style="color:#6b7280;">Standard rate</td>
+              </tr>
+              <tr>
+                <td style="font-weight:500;">First 100 Requests</td>
+                <td><span style="font-weight:600;color:#15803d;">Free</span></td>
+                <td style="color:#6b7280;">Trial credits applied</td>
+              </tr>
+              <tr>
+                <td style="font-weight:500;">Volume (10k+/mo)</td>
+                <td><span style="font-weight:600;color:#7e22ce;">ⓒ 0.6</span></td>
+                <td style="color:#6b7280;">25% discount</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---- METRICS TAB ---- -->
+    <div class="tab-section">
+      <div class="tab-title">Metrics</div>
+
+      <!-- 2x2 metric grid -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+
+        <!-- Card 1: Avg Latency -->
+        <div class="metric-card">
+          <div class="metric-label">Avg Latency</div>
+          <div class="metric-value">342<span style="font-size:16px;color:#6b7280;font-weight:500;">ms</span></div>
+          <span class="badge badge-success" style="margin-bottom:10px;">Within SLA</span>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+            <div class="progress-track">
+              <div class="progress-fill green" style="width:22.8%;"></div>
+            </div>
+            <span style="font-size:12px;color:#6b7280;white-space:nowrap;">342 / 1500ms</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Throughput -->
+        <div class="metric-card">
+          <div class="metric-label">Throughput</div>
+          <div class="metric-value">28.4<span style="font-size:16px;color:#6b7280;font-weight:500;"> RPS</span></div>
+          <span class="badge badge-success">Healthy</span>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+            <div class="progress-track">
+              <div class="progress-fill green" style="width:56.8%;"></div>
+            </div>
+            <span style="font-size:12px;color:#6b7280;white-space:nowrap;">28.4 / 50 RPS</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Error Rate -->
+        <div class="metric-card">
+          <div class="metric-label">Error Rate</div>
+          <div class="metric-value">0.8<span style="font-size:16px;color:#6b7280;font-weight:500;">%</span></div>
+          <span class="badge badge-success" style="margin-bottom:10px;">Within SLA</span>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+            <div class="progress-track">
+              <div class="progress-fill green" style="width:16%;"></div>
+            </div>
+            <span style="font-size:12px;color:#6b7280;white-space:nowrap;">0.8 / 5%</span>
+          </div>
+        </div>
+
+        <!-- Card 4: Hallucination Rate -->
+        <div class="metric-card">
+          <div class="metric-label">Hallucination Rate</div>
+          <div class="metric-value">2.1<span style="font-size:16px;color:#6b7280;font-weight:500;">%</span></div>
+          <span class="badge badge-success" style="margin-bottom:10px;">Within SLA</span>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+            <div class="progress-track">
+              <div class="progress-fill green" style="width:42%;"></div>
+            </div>
+            <span style="font-size:12px;color:#6b7280;white-space:nowrap;">2.1 / 5%</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Chart placeholder -->
+      <div style="height:160px;border:1.5px dashed #d1d5db;border-radius:10px;background:#f9fafb;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        <span style="font-size:13px;color:#9ca3af;font-weight:500;">7-Day Metrics Trend Chart</span>
+        <span style="font-size:12px;color:#d1d5db;">Latency · Error Rate · Throughput · Hallucination Rate</span>
+      </div>
+    </div>
+
+    <!-- ---- API DOCS TAB ---- -->
+    <div class="tab-section">
+      <div class="tab-title">API Docs</div>
+      <h3 style="font-size:16px;font-weight:600;color:#111827;margin-bottom:16px;">API Reference</h3>
+
+      <div style="margin-bottom:16px;">
+        <div style="font-size:12px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">Endpoint</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="background:#dcfce7;color:#15803d;font-size:12px;font-weight:700;padding:3px 9px;border-radius:5px;">POST</span>
+          <code style="font-size:13px;color:#374151;background:#f3f4f6;padding:5px 12px;border-radius:6px;font-family:'Courier New',monospace;">https://api.agenthub.io/v1/agents/agent-001/run</code>
+        </div>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <div style="font-size:12px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Request Example</div>
+        <div class="code-block">curl -X POST https://api.agenthub.io/v1/agents/agent-001/run \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "input": "Summarize the following document...",
+    "options": {
+      "max_length": 500,
+      "language": "en",
+      "pii_filter": true
+    }
+  }'</div>
+      </div>
+
+      <div>
+        <div style="font-size:12px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Response Example</div>
+        <div class="code-block">{
+  "id": "req_xK9mP2q...",
+  "output": "...",
+  "latency_ms": 342,
+  "credits_used": 0.8,
+  "hallucination_score": 0.04,
+  "pii_detected": false
+}</div>
+      </div>
+    </div>
+
+    <!-- ---- REVIEWS TAB ---- -->
+    <div class="tab-section">
+      <div class="tab-title">Reviews</div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+        <h3 style="font-size:16px;font-weight:600;color:#111827;">User Reviews</h3>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="color:#f59e0b;font-size:18px;">★</span>
+          <span style="font-size:20px;font-weight:700;color:#111827;">4.9</span>
+          <span style="font-size:13px;color:#6b7280;">(18,240 reviews)</span>
+        </div>
+      </div>
+
+      <!-- Review 1 -->
+      <div class="review-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+          <div>
+            <span style="font-size:14px;font-weight:600;color:#111827;">Sarah Chen</span>
+            <span style="font-size:13px;color:#9ca3af;margin-left:6px;">TechCorp</span>
+          </div>
+          <span style="font-size:12px;color:#9ca3af;">Mar 10, 2026</span>
+        </div>
+        <div style="color:#f59e0b;margin-bottom:8px;font-size:15px;">★★★★★</div>
+        <p style="font-size:14px;color:#374151;line-height:1.6;">"Incredible accuracy on our legal documents. Hallucination rate is impressively low."</p>
+      </div>
+
+      <!-- Review 2 -->
+      <div class="review-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+          <div>
+            <span style="font-size:14px;font-weight:600;color:#111827;">Marcus Johnson</span>
+            <span style="font-size:13px;color:#9ca3af;margin-left:6px;">DataFlow</span>
+          </div>
+          <span style="font-size:12px;color:#9ca3af;">Feb 28, 2026</span>
+        </div>
+        <div style="color:#f59e0b;margin-bottom:8px;font-size:15px;">★★★★★</div>
+        <p style="font-size:14px;color:#374151;line-height:1.6;">"We process 50k documents/day with this agent. Latency is consistently under 400ms."</p>
+      </div>
+
+      <!-- Review 3 -->
+      <div class="review-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+          <div>
+            <span style="font-size:14px;font-weight:600;color:#111827;">Aisha Patel</span>
+            <span style="font-size:13px;color:#9ca3af;margin-left:6px;">FinanceCo</span>
+          </div>
+          <span style="font-size:12px;color:#9ca3af;">Feb 15, 2026</span>
+        </div>
+        <div style="margin-bottom:8px;font-size:15px;">
+          <span style="color:#f59e0b;">★★★★</span><span style="color:#d1d5db;">★</span>
+        </div>
+        <p style="font-size:14px;color:#374151;line-height:1.6;">"Great agent overall. Wish there were more language options but the existing ones work well."</p>
+      </div>
+
+      <!-- Review 4 -->
+      <div class="review-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+          <div>
+            <span style="font-size:14px;font-weight:600;color:#111827;">Tom Williams</span>
+            <span style="font-size:13px;color:#9ca3af;margin-left:6px;">MediaGroup</span>
+          </div>
+          <span style="font-size:12px;color:#9ca3af;">Jan 30, 2026</span>
+        </div>
+        <div style="color:#f59e0b;margin-bottom:8px;font-size:15px;">★★★★★</div>
+        <p style="font-size:14px;color:#374151;line-height:1.6;">"Replaced our in-house NLP pipeline. The GDPR compliance features saved us months of work."</p>
+      </div>
+
+    </div>
+    <!-- end tabs card -->
+  </div>
+
+</main>
+</body>
+</html>

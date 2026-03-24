@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytics — AgentHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f9fafb; color: #111827; }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; font-size: 14px; text-decoration: none;
+      border-radius: 8px; margin-bottom: 2px; color: #4b5563;
+      transition: background 0.14s, color 0.14s;
+    }
+    .nav-item:hover  { background: #f3f4f6; color: #111827; }
+    .nav-item.active { background: #eff6ff; color: #2563eb; font-weight: 600; }
+
+    .card {
+      background: white; border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+      border: 1px solid #e5e7eb;
+    }
+
+    .btn {
+      border-radius: 8px; padding: 8px 16px;
+      font-size: 14px; font-weight: 500; border: none; cursor: pointer;
+      font-family: 'Inter', sans-serif; transition: filter 0.15s;
+    }
+    .btn:hover { filter: brightness(0.92); }
+    .btn-primary   { background: #2563eb; color: white; }
+    .btn-secondary { background: white; border: 1px solid #d1d5db; color: #374151; }
+    .btn-active    { background: #2563eb; color: white; }
+
+    .badge { border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; }
+    .badge-success { background: #dcfce7; color: #15803d; }
+    .badge-warning { background: #fef9c3; color: #a16207; }
+    .badge-error   { background: #fee2e2; color: #dc2626; }
+    .badge-info    { background: #dbeafe; color: #1d4ed8; }
+
+    .trend-up   { color: #16a34a; font-size: 12px; font-weight: 500; }
+    .trend-down { color: #dc2626; font-size: 12px; font-weight: 500; }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: #f9fafb; }
+    th { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 16px; text-align: left; font-weight: 600; }
+    td { padding: 14px 16px; font-size: 14px; color: #374151; border-bottom: 1px solid #f3f4f6; }
+    tbody tr:hover { background: #f9fafb; }
+    tbody tr:last-child td { border-bottom: none; }
+
+    /* SVG chart helpers */
+    .chart-bar { transition: opacity 0.15s; }
+    .chart-bar:hover { opacity: 0.8; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside style="position:fixed;top:0;left:0;width:256px;height:100vh;background:white;border-right:1px solid #e5e7eb;display:flex;flex-direction:column;z-index:100;">
+  <div style="padding:20px;border-bottom:1px solid #e5e7eb;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;background:#2563eb;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;">A</div>
+      <span style="font-size:16px;font-weight:700;color:#111827;">AgentHub</span>
+    </div>
+  </div>
+  <nav style="flex:1;padding:12px 8px;overflow-y:auto;">
+    <a class="nav-item" href="dashboard.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a class="nav-item" href="index.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      Marketplace
+    </a>
+    <a class="nav-item" href="deployments.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      Deployments
+    </a>
+    <a class="nav-item active" href="analytics.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Analytics
+    </a>
+    <a class="nav-item" href="billing.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      Billing
+    </a>
+    <div style="height:1px;background:#e5e7eb;margin:8px 4px;"></div>
+    <a class="nav-item" href="my-agents.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M2 20c0-4 4-7 10-7s10 3 10 7"/></svg>
+      My Agents
+    </a>
+    <a class="nav-item" href="admin.html">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      Admin
+    </a>
+  </nav>
+  <div style="padding:16px;border-top:1px solid #e5e7eb;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:36px;height:36px;background:#dbeafe;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#2563eb;flex-shrink:0;">AM</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#111827;">Arjun Mehta</div>
+        <span style="font-size:11px;background:#dbeafe;color:#1d4ed8;padding:1px 7px;border-radius:999px;font-weight:500;">Developer</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- TOPBAR -->
+<header style="position:fixed;top:0;left:256px;right:0;height:64px;background:white;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:99;">
+  <div style="font-size:14px;font-weight:500;color:#6b7280;">
+    <span style="color:#111827;font-weight:600;">Analytics</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <!-- Date range selector -->
+    <div style="display:flex;gap:4px;background:#f3f4f6;border-radius:8px;padding:3px;">
+      <button class="btn" style="padding:5px 14px;font-size:13px;background:white;border-radius:6px;box-shadow:0 1px 2px rgba(0,0,0,0.08);">7d</button>
+      <button class="btn" style="padding:5px 14px;font-size:13px;background:transparent;border:none;color:#6b7280;">30d</button>
+      <button class="btn" style="padding:5px 14px;font-size:13px;background:transparent;border:none;color:#6b7280;">90d</button>
+    </div>
+    <button class="btn btn-secondary" style="display:flex;align-items:center;gap:6px;font-size:13px;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export CSV
+    </button>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main style="margin-left:256px;padding-top:64px;min-height:100vh;">
+  <div style="padding:28px 28px;">
+
+    <!-- KPI cards -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:28px;">
+
+      <!-- Total API calls -->
+      <div class="card" style="padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+          <span style="font-size:13px;font-weight:500;color:#6b7280;">Total API Calls</span>
+          <div style="width:36px;height:36px;background:#eff6ff;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+        </div>
+        <div style="font-size:28px;font-weight:700;color:#111827;margin-bottom:4px;">2.47M</div>
+        <div class="trend-up">&#9650; 18.4% vs last period</div>
+      </div>
+
+      <!-- Avg latency -->
+      <div class="card" style="padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+          <span style="font-size:13px;font-weight:500;color:#6b7280;">Avg Latency</span>
+          <div style="width:36px;height:36px;background:#f0fdf4;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+        </div>
+        <div style="font-size:28px;font-weight:700;color:#111827;margin-bottom:4px;">183 ms</div>
+        <div class="trend-up">&#9660; 12ms faster vs last period</div>
+      </div>
+
+      <!-- Success rate -->
+      <div class="card" style="padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+          <span style="font-size:13px;font-weight:500;color:#6b7280;">Success Rate</span>
+          <div style="width:36px;height:36px;background:#fefce8;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ca8a04" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+        <div style="font-size:28px;font-weight:700;color:#111827;margin-bottom:4px;">99.2%</div>
+        <div class="trend-up">&#9650; 0.3% vs last period</div>
+      </div>
+
+      <!-- Credits earned -->
+      <div class="card" style="padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+          <span style="font-size:13px;font-weight:500;color:#6b7280;">Credits Earned</span>
+          <div style="width:36px;height:36px;background:#faf5ff;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+        </div>
+        <div style="font-size:28px;font-weight:700;color:#111827;margin-bottom:4px;">&#9426; 14,820</div>
+        <div class="trend-up">&#9650; 22.1% vs last period</div>
+      </div>
+    </div>
+
+    <!-- Charts row -->
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:28px;">
+
+      <!-- API Calls over time (bar chart) -->
+      <div class="card" style="padding:24px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <div>
+            <div style="font-size:15px;font-weight:600;color:#111827;">API Calls Over Time</div>
+            <div style="font-size:12px;color:#6b7280;margin-top:2px;">Daily call volume for the past 7 days</div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:#6b7280;"><span style="width:10px;height:10px;background:#2563eb;border-radius:2px;display:inline-block;"></span>SummarizeAI Pro</span>
+            <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:#6b7280;"><span style="width:10px;height:10px;background:#93c5fd;border-radius:2px;display:inline-block;"></span>CodeReview Bot</span>
+          </div>
+        </div>
+        <!-- SVG bar chart -->
+        <svg viewBox="0 0 560 180" width="100%" height="180" style="overflow:visible;">
+          <!-- Y-axis lines -->
+          <line x1="50" y1="10" x2="50" y2="150" stroke="#f3f4f6" stroke-width="1"/>
+          <line x1="50" y1="10" x2="550" y2="10" stroke="#f3f4f6" stroke-width="1"/>
+          <line x1="50" y1="47" x2="550" y2="47" stroke="#f3f4f6" stroke-width="1"/>
+          <line x1="50" y1="84" x2="550" y2="84" stroke="#f3f4f6" stroke-width="1"/>
+          <line x1="50" y1="121" x2="550" y2="121" stroke="#f3f4f6" stroke-width="1"/>
+          <line x1="50" y1="150" x2="550" y2="150" stroke="#e5e7eb" stroke-width="1"/>
+          <!-- Y labels -->
+          <text x="42" y="14" font-size="10" fill="#9ca3af" text-anchor="end">400k</text>
+          <text x="42" y="51" font-size="10" fill="#9ca3af" text-anchor="end">300k</text>
+          <text x="42" y="88" font-size="10" fill="#9ca3af" text-anchor="end">200k</text>
+          <text x="42" y="125" font-size="10" fill="#9ca3af" text-anchor="end">100k</text>
+          <text x="42" y="154" font-size="10" fill="#9ca3af" text-anchor="end">0</text>
+          <!-- Day: Mon -->
+          <rect class="chart-bar" x="58"  y="60"  width="24" height="90" fill="#2563eb" rx="3"/>
+          <rect class="chart-bar" x="84"  y="95"  width="24" height="55" fill="#93c5fd" rx="3"/>
+          <!-- Day: Tue -->
+          <rect class="chart-bar" x="134" y="50"  width="24" height="100" fill="#2563eb" rx="3"/>
+          <rect class="chart-bar" x="160" y="88"  width="24" height="62" fill="#93c5fd" rx="3"/>
+          <!-- Day: Wed -->
+          <rect class="chart-bar" x="210" y="30"  width="24" height="120" fill="#2563eb" rx="3"/>
+          <rect class="chart-bar" x="236" y="75"  width="24" height="75" fill="#93c5fd" rx="3"/>
+          <!-- Day: Thu -->
+          <rect class="chart-bar" x="286" y="42"  width="24" height="108" fill="#2563eb" rx="3"/>
+          <rect class="chart-bar" x="312" y="80"  width="24" height="70" fill="#93c5fd" rx="3"/>
+          <!-- Day: Fri -->
+          <rect class="chart-bar" x="362" y="20"  width="24" height="130" fill="#2563eb" rx="3"/>
+          <rect class="chart-bar" x="388" y="60"  width="24" height="90" fill="#93c5fd" rx="3"/>
+          <!-- Day: Sat -->
+          <rect class="chart-bar" x="438" y="70"  width="24" height="80" fill="#2563eb" rx="3"/>
+          <rect class="chart-bar" x="464" y="108" width="24" height="42" fill="#93c5fd" rx="3"/>
+          <!-- Day: Sun -->
+          <rect class="chart-bar" x="514" y="55"  width="24" height="95" fill="#2563eb" rx="3"/>
+          <rect class="chart-bar" x="540" y="90"  width="24" height="60" fill="#93c5fd" rx="3"/>
+          <!-- X labels -->
+          <text x="78"  y="168" font-size="10" fill="#6b7280" text-anchor="middle">Mon</text>
+          <text x="154" y="168" font-size="10" fill="#6b7280" text-anchor="middle">Tue</text>
+          <text x="230" y="168" font-size="10" fill="#6b7280" text-anchor="middle">Wed</text>
+          <text x="306" y="168" font-size="10" fill="#6b7280" text-anchor="middle">Thu</text>
+          <text x="382" y="168" font-size="10" fill="#6b7280" text-anchor="middle">Fri</text>
+          <text x="458" y="168" font-size="10" fill="#6b7280" text-anchor="middle">Sat</text>
+          <text x="534" y="168" font-size="10" fill="#6b7280" text-anchor="middle">Sun</text>
+        </svg>
+      </div>
+
+      <!-- Success rate donut -->
+      <div class="card" style="padding:24px;">
+        <div style="font-size:15px;font-weight:600;color:#111827;margin-bottom:4px;">Request Outcomes</div>
+        <div style="font-size:12px;color:#6b7280;margin-bottom:20px;">Last 7 days</div>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <!-- Donut SVG -->
+          <svg viewBox="0 0 140 140" width="140" height="140">
+            <!-- Success: 99.2% -->
+            <circle cx="70" cy="70" r="52" fill="none" stroke="#dcfce7" stroke-width="22"/>
+            <circle cx="70" cy="70" r="52" fill="none" stroke="#16a34a" stroke-width="22"
+                    stroke-dasharray="325.7 5.8" stroke-dashoffset="81.7" stroke-linecap="round"/>
+            <!-- Error: 0.5% -->
+            <circle cx="70" cy="70" r="52" fill="none" stroke="#fee2e2" stroke-width="22"
+                    stroke-dasharray="1.6 330" stroke-dashoffset="-244.1" stroke-linecap="round"/>
+            <!-- Center label -->
+            <text x="70" y="65" font-size="18" font-weight="700" fill="#111827" text-anchor="middle" font-family="Inter,sans-serif">99.2%</text>
+            <text x="70" y="82" font-size="10" fill="#6b7280" text-anchor="middle" font-family="Inter,sans-serif">Success</text>
+          </svg>
+          <!-- Legend -->
+          <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;width:100%;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div style="display:flex;align-items:center;gap:7px;"><span style="width:10px;height:10px;background:#16a34a;border-radius:2px;display:inline-block;"></span><span style="font-size:13px;color:#374151;">Success</span></div>
+              <span style="font-size:13px;font-weight:600;color:#111827;">2.45M</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div style="display:flex;align-items:center;gap:7px;"><span style="width:10px;height:10px;background:#f97316;border-radius:2px;display:inline-block;"></span><span style="font-size:13px;color:#374151;">Timeout</span></div>
+              <span style="font-size:13px;font-weight:600;color:#111827;">12.4k</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div style="display:flex;align-items:center;gap:7px;"><span style="width:10px;height:10px;background:#dc2626;border-radius:2px;display:inline-block;"></span><span style="font-size:13px;color:#374151;">Error</span></div>
+              <span style="font-size:13px;font-weight:600;color:#111827;">7.2k</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Latency line chart -->
+    <div class="card" style="padding:24px;margin-bottom:28px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <div>
+          <div style="font-size:15px;font-weight:600;color:#111827;">P50 / P95 / P99 Latency</div>
+          <div style="font-size:12px;color:#6b7280;margin-top:2px;">Response time percentiles over the last 7 days (ms)</div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:center;">
+          <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:#6b7280;"><span style="width:24px;height:3px;background:#2563eb;display:inline-block;border-radius:2px;"></span>P50</span>
+          <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:#6b7280;"><span style="width:24px;height:3px;background:#f59e0b;display:inline-block;border-radius:2px;"></span>P95</span>
+          <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:#6b7280;"><span style="width:24px;height:3px;background:#dc2626;display:inline-block;border-radius:2px;"></span>P99</span>
+        </div>
+      </div>
+      <svg viewBox="0 0 700 160" width="100%" height="160" style="overflow:visible;">
+        <!-- Grid -->
+        <line x1="50" y1="10" x2="690" y2="10" stroke="#f3f4f6" stroke-width="1"/>
+        <line x1="50" y1="45" x2="690" y2="45" stroke="#f3f4f6" stroke-width="1"/>
+        <line x1="50" y1="80" x2="690" y2="80" stroke="#f3f4f6" stroke-width="1"/>
+        <line x1="50" y1="115" x2="690" y2="115" stroke="#f3f4f6" stroke-width="1"/>
+        <line x1="50" y1="140" x2="690" y2="140" stroke="#e5e7eb" stroke-width="1"/>
+        <!-- Y labels -->
+        <text x="42" y="14" font-size="10" fill="#9ca3af" text-anchor="end">800ms</text>
+        <text x="42" y="49" font-size="10" fill="#9ca3af" text-anchor="end">600ms</text>
+        <text x="42" y="84" font-size="10" fill="#9ca3af" text-anchor="end">400ms</text>
+        <text x="42" y="119" font-size="10" fill="#9ca3af" text-anchor="end">200ms</text>
+        <text x="42" y="144" font-size="10" fill="#9ca3af" text-anchor="end">0ms</text>
+        <!-- P99 line (red) - higher latency -->
+        <polyline points="50,55 160,48 270,60 380,52 490,42 600,50 690,44"
+                  fill="none" stroke="#dc2626" stroke-width="2" stroke-linejoin="round"/>
+        <!-- P95 line (amber) -->
+        <polyline points="50,85 160,78 270,88 380,80 490,70 600,76 690,72"
+                  fill="none" stroke="#f59e0b" stroke-width="2" stroke-linejoin="round"/>
+        <!-- P50 area (blue) -->
+        <polygon points="50,140 50,118 160,112 270,120 380,115 490,108 600,112 690,110 690,140"
+                 fill="rgba(37,99,235,0.08)"/>
+        <polyline points="50,118 160,112 270,120 380,115 490,108 600,112 690,110"
+                  fill="none" stroke="#2563eb" stroke-width="2" stroke-linejoin="round"/>
+        <!-- X labels -->
+        <text x="50"  y="158" font-size="10" fill="#6b7280" text-anchor="middle">Mon</text>
+        <text x="160" y="158" font-size="10" fill="#6b7280" text-anchor="middle">Tue</text>
+        <text x="270" y="158" font-size="10" fill="#6b7280" text-anchor="middle">Wed</text>
+        <text x="380" y="158" font-size="10" fill="#6b7280" text-anchor="middle">Thu</text>
+        <text x="490" y="158" font-size="10" fill="#6b7280" text-anchor="middle">Fri</text>
+        <text x="600" y="158" font-size="10" fill="#6b7280" text-anchor="middle">Sat</text>
+        <text x="690" y="158" font-size="10" fill="#6b7280" text-anchor="middle">Sun</text>
+      </svg>
+    </div>
+
+    <!-- Top agents table -->
+    <div class="card">
+      <div style="padding:20px 24px;border-bottom:1px solid #f3f4f6;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:15px;font-weight:600;color:#111827;">Top Agents by Usage</div>
+          <div style="font-size:12px;color:#6b7280;margin-top:2px;">Sorted by API calls in selected period</div>
+        </div>
+        <button class="btn btn-secondary" style="font-size:13px;">View All</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Agent</th>
+            <th>Category</th>
+            <th>API Calls</th>
+            <th>Avg Latency</th>
+            <th>Success Rate</th>
+            <th>Credits Earned</th>
+            <th>Trend</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600;color:#6b7280;">1</td>
+            <td>
+              <div style="font-weight:600;color:#111827;">SummarizeAI Pro</div>
+              <div style="font-size:12px;color:#6b7280;">by NeuralNova Labs</div>
+            </td>
+            <td><span class="badge badge-info">NLP</span></td>
+            <td style="font-weight:600;">1.12M</td>
+            <td>142 ms</td>
+            <td><span class="badge badge-success">99.6%</span></td>
+            <td style="font-weight:600;">&#9426; 6,720</td>
+            <td><span class="trend-up">&#9650; 24%</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#6b7280;">2</td>
+            <td>
+              <div style="font-weight:600;color:#111827;">CodeReview Bot</div>
+              <div style="font-size:12px;color:#6b7280;">by DevToolsAI</div>
+            </td>
+            <td><span class="badge badge-info">Dev Tools</span></td>
+            <td style="font-weight:600;">684k</td>
+            <td>210 ms</td>
+            <td><span class="badge badge-success">99.1%</span></td>
+            <td style="font-weight:600;">&#9426; 4,104</td>
+            <td><span class="trend-up">&#9650; 11%</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#6b7280;">3</td>
+            <td>
+              <div style="font-weight:600;color:#111827;">DataExtract Pro</div>
+              <div style="font-size:12px;color:#6b7280;">by ParseMind</div>
+            </td>
+            <td><span class="badge" style="background:#fce7f3;color:#9d174d;">Data</span></td>
+            <td style="font-weight:600;">412k</td>
+            <td>178 ms</td>
+            <td><span class="badge badge-success">98.8%</span></td>
+            <td style="font-weight:600;">&#9426; 2,472</td>
+            <td><span class="trend-up">&#9650; 8%</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#6b7280;">4</td>
+            <td>
+              <div style="font-weight:600;color:#111827;">ImageTag AI</div>
+              <div style="font-size:12px;color:#6b7280;">by VisionLabs</div>
+            </td>
+            <td><span class="badge" style="background:#f0fdf4;color:#15803d;">Vision</span></td>
+            <td style="font-weight:600;">168k</td>
+            <td>320 ms</td>
+            <td><span class="badge badge-warning">97.4%</span></td>
+            <td style="font-weight:600;">&#9426; 1,008</td>
+            <td><span class="trend-down">&#9660; 3%</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;color:#6b7280;">5</td>
+            <td>
+              <div style="font-weight:600;color:#111827;">TranslatePro X</div>
+              <div style="font-size:12px;color:#6b7280;">by LinguaAI</div>
+            </td>
+            <td><span class="badge" style="background:#fef9c3;color:#a16207;">Translation</span></td>
+            <td style="font-weight:600;">82k</td>
+            <td>195 ms</td>
+            <td><span class="badge badge-success">99.3%</span></td>
+            <td style="font-weight:600;">&#9426; 516</td>
+            <td><span class="trend-up">&#9650; 5%</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</main>
+
+</body>
+</html>
