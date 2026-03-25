@@ -72,3 +72,5 @@ To test different roles, use the role switcher in the user dropdown (TopBar). De
 ## Static Mockups
 
 HTML mockups for all pages are available in the `mockups/` folder. Open `mockups/index.html` in a browser for a quick preview without running the Next.js app.
+
+Link : https://agentic-marketplace-three.vercel.app/
