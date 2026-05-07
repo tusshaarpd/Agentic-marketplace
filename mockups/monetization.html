@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monetization — AgentHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f9fafb; color: #111827; }
+    .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; }
+    .badge { border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; }
+    .badge-success { background: #dcfce7; color: #15803d; }
+    .badge-warning { background: #fef9c3; color: #a16207; }
+    .badge-error   { background: #fee2e2; color: #dc2626; }
+    .badge-info    { background: #dbeafe; color: #1d4ed8; }
+    .badge-neutral { background: #f3f4f6; color: #374151; }
+    .badge-purple  { background: #f3e8ff; color: #7e22ce; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; font-size: 14px; text-decoration: none; color: #4b5563; border-radius: 8px; margin-bottom: 2px; }
+    .nav-item:hover { background: #f3f4f6; color: #111827; }
+    .nav-item.active { background: #fdf2f8; color: #be185d; font-weight: 600; }
+    .btn { border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: 500; border: none; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .btn-primary { background: #be185d; color: white; }
+    .btn-secondary { background: white; border: 1px solid #d1d5db; color: #374151; }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: #f9fafb; }
+    th { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; padding: 11px 16px; text-align: left; font-weight: 600; }
+    td { padding: 13px 16px; font-size: 13px; color: #374151; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+    tbody tr:hover { background: #fafafa; }
+    tbody tr:last-child td { border-bottom: none; }
+    .pill { font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 500; }
+    .progress-track { background: #e5e7eb; border-radius: 999px; height: 6px; overflow: hidden; }
+    .progress-fill  { background: #be185d; border-radius: 999px; height: 100%; }
+    .tier-card { padding: 20px; border-radius: 12px; border: 1.5px solid #e5e7eb; background: white; transition: box-shadow 0.15s, transform 0.15s; }
+    .tier-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .tier-card.featured { border-color: #be185d; background: linear-gradient(135deg,#fdf2f8 0%,#fce7f3 100%); }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside style="position:fixed;top:0;left:0;width:256px;height:100vh;background:white;border-right:1px solid #e5e7eb;display:flex;flex-direction:column;z-index:100;">
+  <div style="padding:20px;border-bottom:1px solid #e5e7eb;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;background:#be185d;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;">A</div>
+      <span style="font-size:16px;font-weight:700;color:#111827;">AgentHub</span>
+    </div>
+  </div>
+  <nav style="flex:1;padding:12px 8px;overflow-y:auto;">
+    <a class="nav-item" href="dashboard.html">📊 Dashboard</a>
+    <a class="nav-item" href="marketplace.html">🛒 Marketplace</a>
+    <a class="nav-item" href="deployments.html">⚡ Deployments</a>
+    <a class="nav-item" href="analytics.html">📈 Analytics</a>
+    <a class="nav-item" href="billing.html">💳 Billing</a>
+    <div style="height:1px;background:#e5e7eb;margin:8px 4px;"></div>
+    <div style="font-size:11px;color:#9ca3af;padding:4px 12px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;">Trust &amp; Control</div>
+    <a class="nav-item" href="security.html">🛡️ Security &amp; Trust</a>
+    <a class="nav-item" href="governance.html">⚖️ Governance</a>
+    <a class="nav-item active" href="monetization.html">💰 Monetization</a>
+    <div style="height:1px;background:#e5e7eb;margin:8px 4px;"></div>
+    <a class="nav-item" href="my-agents.html">🧩 My Agents</a>
+    <a class="nav-item" href="admin.html">🛡️ Admin</a>
+  </nav>
+  <div style="padding:16px;border-top:1px solid #e5e7eb;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:36px;height:36px;background:#fce7f3;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#be185d;">AM</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#111827;">Arjun Mehta</div>
+        <span class="pill" style="background:#dbeafe;color:#1d4ed8;">Developer</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- TOPBAR -->
+<header style="position:fixed;top:0;left:256px;right:0;height:64px;background:white;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:99;">
+  <div style="font-size:14px;color:#6b7280;">
+    <span style="color:#111827;font-weight:600;">Monetization</span>
+    <span style="margin:0 6px;color:#d1d5db;">/</span>
+    <span>Revenue Operations</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <span class="badge badge-success">Q2 GMV +28% YoY</span>
+    <div style="width:36px;height:36px;background:#be185d;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:13px;font-weight:600;">AM</div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main style="margin-left:256px;margin-top:64px;padding:32px;min-height:calc(100vh - 64px);">
+
+  <!-- Page Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+    <div>
+      <h1 style="font-size:24px;font-weight:700;color:#111827;margin-bottom:4px;">Monetize Your Agents</h1>
+      <p style="font-size:14px;color:#6b7280;">Five revenue models, transparent payouts, and AI-driven pricing experiments — built for scale.</p>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-secondary">Pricing Playbook</button>
+      <button class="btn btn-primary">Launch Pricing Experiment</button>
+    </div>
+  </div>
+
+  <!-- Hero Revenue Strip -->
+  <div class="card" style="padding:24px;margin-bottom:20px;background:linear-gradient(135deg,#fdf2f8 0%,#fff 50%);border:1px solid #fbcfe8;">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;">
+      <div>
+        <div style="font-size:12px;color:#9d174d;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Gross Marketplace Volume</div>
+        <div style="font-size:30px;font-weight:700;color:#111827;margin:8px 0 2px;">ⓒ 4,287,500</div>
+        <div style="font-size:13px;color:#16a34a;font-weight:500;">↑ 28.4% vs last quarter</div>
+      </div>
+      <div>
+        <div style="font-size:12px;color:#9d174d;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Platform Take Rate</div>
+        <div style="font-size:30px;font-weight:700;color:#111827;margin:8px 0 2px;">15%</div>
+        <div style="font-size:13px;color:#6b7280;">Tiered: 8–15% by volume</div>
+      </div>
+      <div>
+        <div style="font-size:12px;color:#9d174d;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Developer Earnings (Q2)</div>
+        <div style="font-size:30px;font-weight:700;color:#111827;margin:8px 0 2px;">ⓒ 3,644,375</div>
+        <div style="font-size:13px;color:#16a34a;font-weight:500;">240 active developers</div>
+      </div>
+      <div>
+        <div style="font-size:12px;color:#9d174d;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Avg ARPU</div>
+        <div style="font-size:30px;font-weight:700;color:#111827;margin:8px 0 2px;">ⓒ 1,840</div>
+        <div style="font-size:13px;color:#16a34a;font-weight:500;">↑ 12% MoM</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Revenue Models -->
+  <div class="card" style="padding:24px;margin-bottom:20px;">
+    <div style="margin-bottom:18px;">
+      <h2 style="font-size:16px;font-weight:600;color:#111827;">Five Ways to Monetize</h2>
+      <p style="font-size:13px;color:#6b7280;margin-top:2px;">Mix and match pricing models per agent. Switching is one click — no replatforming required.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;">
+      <div class="tier-card">
+        <div style="font-size:24px;margin-bottom:8px;">⚡</div>
+        <div style="font-weight:700;color:#111827;font-size:14px;">Pay-Per-Request</div>
+        <div style="font-size:11.5px;color:#6b7280;margin:6px 0 12px;line-height:1.5;">Charge per API call. Best for variable workloads.</div>
+        <div style="font-size:18px;font-weight:700;color:#be185d;">ⓒ 0.50–5.00 <span style="font-size:11px;color:#9ca3af;font-weight:500;">/req</span></div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:6px;">Used by 68% of agents</div>
+      </div>
+
+      <div class="tier-card featured">
+        <div style="font-size:24px;margin-bottom:8px;">📦</div>
+        <div style="font-weight:700;color:#111827;font-size:14px;">Subscription</div>
+        <div style="font-size:11.5px;color:#6b7280;margin:6px 0 12px;line-height:1.5;">Monthly seats with included quotas. Best for predictable usage.</div>
+        <div style="font-size:18px;font-weight:700;color:#be185d;">ⓒ 99–1,999 <span style="font-size:11px;color:#9ca3af;font-weight:500;">/mo</span></div>
+        <div style="font-size:11px;color:#9d174d;margin-top:6px;font-weight:600;">Highest retention</div>
+      </div>
+
+      <div class="tier-card">
+        <div style="font-size:24px;margin-bottom:8px;">🪙</div>
+        <div style="font-weight:700;color:#111827;font-size:14px;">Token Metered</div>
+        <div style="font-size:11.5px;color:#6b7280;margin:6px 0 12px;line-height:1.5;">Charge by input/output tokens consumed.</div>
+        <div style="font-size:18px;font-weight:700;color:#be185d;">ⓒ 0.002 <span style="font-size:11px;color:#9ca3af;font-weight:500;">/1K tok</span></div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:6px;">LLM-heavy agents</div>
+      </div>
+
+      <div class="tier-card">
+        <div style="font-size:24px;margin-bottom:8px;">🎯</div>
+        <div style="font-weight:700;color:#111827;font-size:14px;">Outcome-Based</div>
+        <div style="font-size:11.5px;color:#6b7280;margin:6px 0 12px;line-height:1.5;">Pay only on successful resolution / qualified lead / closed ticket.</div>
+        <div style="font-size:18px;font-weight:700;color:#be185d;">ⓒ 8–250 <span style="font-size:11px;color:#9ca3af;font-weight:500;">/outcome</span></div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:6px;">Highest ARPU</div>
+      </div>
+
+      <div class="tier-card">
+        <div style="font-size:24px;margin-bottom:8px;">🤝</div>
+        <div style="font-weight:700;color:#111827;font-size:14px;">Enterprise Contract</div>
+        <div style="font-size:11.5px;color:#6b7280;margin:6px 0 12px;line-height:1.5;">Custom MSAs with private SLAs &amp; data isolation.</div>
+        <div style="font-size:18px;font-weight:700;color:#be185d;">ⓒ 50K+ <span style="font-size:11px;color:#9ca3af;font-weight:500;">/yr</span></div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:6px;">25+ Fortune 500</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Two col: Top Earners + Revenue Trend -->
+  <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;margin-bottom:20px;">
+
+    <!-- Top Earning Agents -->
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="padding:18px 22px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <h2 style="font-size:16px;font-weight:600;color:#111827;">Top Earning Agents — Q2 2026</h2>
+          <p style="font-size:13px;color:#6b7280;margin-top:2px;">Ranked by net developer earnings after 15% platform fee.</p>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Agent</th>
+            <th>Model</th>
+            <th>Calls</th>
+            <th>Gross</th>
+            <th>Net (Dev)</th>
+            <th>Trend</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>1</b></td>
+            <td>
+              <div style="font-weight:600;color:#111827;">FraudShield ML</div>
+              <div style="font-size:11px;color:#6b7280;">SecureNet · Finance</div>
+            </td>
+            <td><span class="pill" style="background:#fce7f3;color:#9d174d;">Outcome</span></td>
+            <td>184,210</td>
+            <td><b style="color:#111827;">ⓒ 644,750</b></td>
+            <td><b style="color:#16a34a;">ⓒ 548,037</b></td>
+            <td><span style="color:#16a34a;">↑ 41%</span></td>
+          </tr>
+          <tr>
+            <td><b>2</b></td>
+            <td>
+              <div style="font-weight:600;color:#111827;">NeuralSummarizer Pro</div>
+              <div style="font-size:11px;color:#6b7280;">NeuralAI Labs · NLP</div>
+            </td>
+            <td><span class="pill" style="background:#dbeafe;color:#1d4ed8;">Per-Request</span></td>
+            <td>1,847,200</td>
+            <td><b style="color:#111827;">ⓒ 478,920</b></td>
+            <td><b style="color:#16a34a;">ⓒ 407,082</b></td>
+            <td><span style="color:#16a34a;">↑ 22%</span></td>
+          </tr>
+          <tr>
+            <td><b>3</b></td>
+            <td>
+              <div style="font-weight:600;color:#111827;">DocuExtract AI</div>
+              <div style="font-size:11px;color:#6b7280;">Priya Labs · Documents</div>
+            </td>
+            <td><span class="pill" style="background:#fef3c7;color:#92400e;">Subscription</span></td>
+            <td>921,500</td>
+            <td><b style="color:#111827;">ⓒ 412,800</b></td>
+            <td><b style="color:#16a34a;">ⓒ 350,880</b></td>
+            <td><span style="color:#16a34a;">↑ 18%</span></td>
+          </tr>
+          <tr>
+            <td><b>4</b></td>
+            <td>
+              <div style="font-weight:600;color:#111827;">CodeReview Bot</div>
+              <div style="font-size:11px;color:#6b7280;">Syntax Corp · DevTools</div>
+            </td>
+            <td><span class="pill" style="background:#dbeafe;color:#1d4ed8;">Per-Request</span></td>
+            <td>684,900</td>
+            <td><b style="color:#111827;">ⓒ 287,400</b></td>
+            <td><b style="color:#16a34a;">ⓒ 244,290</b></td>
+            <td><span style="color:#16a34a;">↑ 14%</span></td>
+          </tr>
+          <tr>
+            <td><b>5</b></td>
+            <td>
+              <div style="font-weight:600;color:#111827;">SalesIQ Agent</div>
+              <div style="font-size:11px;color:#6b7280;">RevPath · Sales</div>
+            </td>
+            <td><span class="pill" style="background:#fce7f3;color:#9d174d;">Outcome</span></td>
+            <td>34,820</td>
+            <td><b style="color:#111827;">ⓒ 248,900</b></td>
+            <td><b style="color:#16a34a;">ⓒ 211,565</b></td>
+            <td><span style="color:#16a34a;">↑ 67%</span></td>
+          </tr>
+          <tr>
+            <td><b>6</b></td>
+            <td>
+              <div style="font-weight:600;color:#111827;">SupportFlow AI</div>
+              <div style="font-size:11px;color:#6b7280;">CarePilot · CX</div>
+            </td>
+            <td><span class="pill" style="background:#fef3c7;color:#92400e;">Subscription</span></td>
+            <td>1,124,000</td>
+            <td><b style="color:#111827;">ⓒ 198,600</b></td>
+            <td><b style="color:#16a34a;">ⓒ 168,810</b></td>
+            <td><span style="color:#dc2626;">↓ 4%</span></td>
+          </tr>
+          <tr>
+            <td><b>7</b></td>
+            <td>
+              <div style="font-weight:600;color:#111827;">TranslatePro X</div>
+              <div style="font-size:11px;color:#6b7280;">LinguaAI · Translation</div>
+            </td>
+            <td><span class="pill" style="background:#e0e7ff;color:#4338ca;">Token</span></td>
+            <td>3,842,000</td>
+            <td><b style="color:#111827;">ⓒ 184,200</b></td>
+            <td><b style="color:#16a34a;">ⓒ 156,570</b></td>
+            <td><span style="color:#16a34a;">↑ 9%</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Revenue trend chart -->
+    <div class="card" style="padding:22px;">
+      <div style="margin-bottom:14px;">
+        <h2 style="font-size:16px;font-weight:600;color:#111827;">Revenue by Source — 6 Months</h2>
+        <p style="font-size:13px;color:#6b7280;margin-top:2px;">Stacked across the five monetization models.</p>
+      </div>
+
+      <!-- Stacked bar chart (SVG) -->
+      <div style="height:240px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:14px;position:relative;">
+        <svg viewBox="0 0 360 200" width="100%" height="100%" preserveAspectRatio="none">
+          <!-- gridlines -->
+          <line x1="0" y1="50"  x2="360" y2="50"  stroke="#e5e7eb" stroke-dasharray="3,3"/>
+          <line x1="0" y1="100" x2="360" y2="100" stroke="#e5e7eb" stroke-dasharray="3,3"/>
+          <line x1="0" y1="150" x2="360" y2="150" stroke="#e5e7eb" stroke-dasharray="3,3"/>
+          <line x1="0" y1="200" x2="360" y2="200" stroke="#e5e7eb"/>
+
+          <!-- 6 bars stacked: per-req, subscription, token, outcome, enterprise -->
+          <g transform="translate(20,0)">
+            <rect x="0"   y="160" width="36" height="40" fill="#be185d"/>
+            <rect x="0"   y="120" width="36" height="40" fill="#f472b6"/>
+            <rect x="0"   y="100" width="36" height="20" fill="#fbcfe8"/>
+            <rect x="0"   y="84"  width="36" height="16" fill="#fde68a"/>
+            <rect x="0"   y="74"  width="36" height="10" fill="#a7f3d0"/>
+
+            <rect x="56"  y="155" width="36" height="45" fill="#be185d"/>
+            <rect x="56"  y="110" width="36" height="45" fill="#f472b6"/>
+            <rect x="56"  y="88"  width="36" height="22" fill="#fbcfe8"/>
+            <rect x="56"  y="70"  width="36" height="18" fill="#fde68a"/>
+            <rect x="56"  y="58"  width="36" height="12" fill="#a7f3d0"/>
+
+            <rect x="112" y="148" width="36" height="52" fill="#be185d"/>
+            <rect x="112" y="98"  width="36" height="50" fill="#f472b6"/>
+            <rect x="112" y="74"  width="36" height="24" fill="#fbcfe8"/>
+            <rect x="112" y="54"  width="36" height="20" fill="#fde68a"/>
+            <rect x="112" y="40"  width="36" height="14" fill="#a7f3d0"/>
+
+            <rect x="168" y="142" width="36" height="58" fill="#be185d"/>
+            <rect x="168" y="86"  width="36" height="56" fill="#f472b6"/>
+            <rect x="168" y="60"  width="36" height="26" fill="#fbcfe8"/>
+            <rect x="168" y="38"  width="36" height="22" fill="#fde68a"/>
+            <rect x="168" y="22"  width="36" height="16" fill="#a7f3d0"/>
+
+            <rect x="224" y="138" width="36" height="62" fill="#be185d"/>
+            <rect x="224" y="80"  width="36" height="58" fill="#f472b6"/>
+            <rect x="224" y="52"  width="36" height="28" fill="#fbcfe8"/>
+            <rect x="224" y="28"  width="36" height="24" fill="#fde68a"/>
+            <rect x="224" y="10"  width="36" height="18" fill="#a7f3d0"/>
+
+            <rect x="280" y="132" width="36" height="68" fill="#be185d"/>
+            <rect x="280" y="72"  width="36" height="60" fill="#f472b6"/>
+            <rect x="280" y="42"  width="36" height="30" fill="#fbcfe8"/>
+            <rect x="280" y="14"  width="36" height="28" fill="#fde68a"/>
+            <rect x="280" y="-6"  width="36" height="20" fill="#a7f3d0"/>
+          </g>
+        </svg>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:#9ca3af;padding:0 4px;">
+        <span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;font-size:11px;">
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:10px;background:#be185d;border-radius:2px;"></div>Per-request</div>
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:10px;background:#f472b6;border-radius:2px;"></div>Subscription</div>
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:10px;background:#fbcfe8;border-radius:2px;"></div>Token</div>
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:10px;background:#fde68a;border-radius:2px;"></div>Outcome</div>
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:10px;background:#a7f3d0;border-radius:2px;"></div>Enterprise</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pricing Experiments + Payouts -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+
+    <!-- Active Pricing Experiments -->
+    <div class="card" style="padding:22px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div>
+          <h2 style="font-size:16px;font-weight:600;color:#111827;">AI Pricing Experiments</h2>
+          <p style="font-size:13px;color:#6b7280;margin-top:2px;">Multi-armed bandit suggests optimal price elasticity per cohort.</p>
+        </div>
+        <span class="badge badge-info">3 RUNNING</span>
+      </div>
+
+      <div style="border:1px solid #e5e7eb;border-radius:10px;padding:14px;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-weight:600;color:#111827;font-size:14px;">DocuExtract AI · Pro Tier</span>
+          <span class="badge badge-warning">DAY 12 / 21</span>
+        </div>
+        <div style="font-size:12px;color:#6b7280;margin-bottom:10px;">A: ⓒ 199/mo &nbsp;·&nbsp; B: ⓒ 249/mo &nbsp;·&nbsp; C: ⓒ 179/mo + usage</div>
+        <div style="font-size:12px;color:#374151;">
+          <b style="color:#16a34a;">Variant B leading</b> — 14% higher LTV, 4% lower conversion. Recommendation: <b>ship B</b> at 95% confidence.
+        </div>
+      </div>
+
+      <div style="border:1px solid #e5e7eb;border-radius:10px;padding:14px;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-weight:600;color:#111827;font-size:14px;">SalesIQ · Outcome Pricing</span>
+          <span class="badge badge-warning">DAY 4 / 14</span>
+        </div>
+        <div style="font-size:12px;color:#6b7280;margin-bottom:10px;">Per qualified-lead: ⓒ 8 &nbsp;·&nbsp; ⓒ 12 &nbsp;·&nbsp; ⓒ 15</div>
+        <div style="font-size:12px;color:#374151;">Bandit allocating 64% traffic to ⓒ 12 — best margin/volume mix so far.</div>
+      </div>
+
+      <div style="border:1px solid #e5e7eb;border-radius:10px;padding:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-weight:600;color:#111827;font-size:14px;">FraudShield · Free Trial Length</span>
+          <span class="badge badge-success">DECIDED</span>
+        </div>
+        <div style="font-size:12px;color:#6b7280;margin-bottom:10px;">7d vs 14d vs 30d trials</div>
+        <div style="font-size:12px;color:#374151;"><b style="color:#16a34a;">14d wins</b> — +31% trial→paid vs 7d, +2% over 30d at 1/2 the CAC.</div>
+      </div>
+    </div>
+
+    <!-- Payouts Schedule -->
+    <div class="card" style="padding:22px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div>
+          <h2 style="font-size:16px;font-weight:600;color:#111827;">Developer Payouts</h2>
+          <p style="font-size:13px;color:#6b7280;margin-top:2px;">Net-15 default. ACH, SEPA, wire, USDC supported.</p>
+        </div>
+        <button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;">View Ledger</button>
+      </div>
+
+      <div style="background:#fdf2f8;border:1px solid #fbcfe8;border-radius:10px;padding:16px;margin-bottom:14px;">
+        <div style="font-size:12px;color:#9d174d;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Pending Payout · May 15</div>
+        <div style="font-size:28px;font-weight:700;color:#111827;margin:6px 0 4px;">ⓒ 487,920</div>
+        <div style="font-size:12px;color:#9d174d;">142 developers · auto-released after fraud check</div>
+      </div>
+
+      <table style="margin-top:0;">
+        <thead>
+          <tr>
+            <th>Developer</th>
+            <th>Method</th>
+            <th>Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>NeuralAI Labs</td>
+            <td>Wire (USD)</td>
+            <td><b>ⓒ 84,290</b></td>
+            <td><span class="badge badge-success">SCHEDULED</span></td>
+          </tr>
+          <tr>
+            <td>SecureNet</td>
+            <td>ACH</td>
+            <td><b>ⓒ 71,450</b></td>
+            <td><span class="badge badge-success">SCHEDULED</span></td>
+          </tr>
+          <tr>
+            <td>Priya Labs</td>
+            <td>SEPA</td>
+            <td><b>ⓒ 58,210</b></td>
+            <td><span class="badge badge-warning">REVIEW</span></td>
+          </tr>
+          <tr>
+            <td>Syntax Corp</td>
+            <td>USDC</td>
+            <td><b>ⓒ 42,180</b></td>
+            <td><span class="badge badge-success">SCHEDULED</span></td>
+          </tr>
+          <tr>
+            <td>RevPath AI</td>
+            <td>Wire (USD)</td>
+            <td><b>ⓒ 38,900</b></td>
+            <td><span class="badge badge-success">SCHEDULED</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Marketplace Economics -->
+  <div class="card" style="padding:22px;margin-bottom:20px;">
+    <h2 style="font-size:16px;font-weight:600;color:#111827;">Marketplace Economics — Take-Rate Schedule</h2>
+    <p style="font-size:13px;color:#6b7280;margin:2px 0 18px;">Volume-tiered fees keep 85% (or more) of revenue with the developer. Stripe-powered settlement.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+      <div style="border:1px solid #e5e7eb;border-radius:10px;padding:16px;">
+        <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">Monthly GMV &lt; ⓒ 10K</div>
+        <div style="font-size:24px;font-weight:700;color:#111827;margin:6px 0 4px;">15<span style="font-size:14px;color:#6b7280;">%</span></div>
+        <div style="font-size:11px;color:#6b7280;">Standard rate</div>
+      </div>
+      <div style="border:1px solid #e5e7eb;border-radius:10px;padding:16px;">
+        <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">ⓒ 10K – 100K</div>
+        <div style="font-size:24px;font-weight:700;color:#111827;margin:6px 0 4px;">12<span style="font-size:14px;color:#6b7280;">%</span></div>
+        <div style="font-size:11px;color:#6b7280;">Growth tier</div>
+      </div>
+      <div style="border:1px solid #fbcfe8;background:#fdf2f8;border-radius:10px;padding:16px;">
+        <div style="font-size:11px;color:#9d174d;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">ⓒ 100K – 1M</div>
+        <div style="font-size:24px;font-weight:700;color:#be185d;margin:6px 0 4px;">10<span style="font-size:14px;color:#9d174d;">%</span></div>
+        <div style="font-size:11px;color:#9d174d;">Most popular</div>
+      </div>
+      <div style="border:1px solid #e5e7eb;border-radius:10px;padding:16px;">
+        <div style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">ⓒ 1M+</div>
+        <div style="font-size:24px;font-weight:700;color:#111827;margin:6px 0 4px;">8<span style="font-size:14px;color:#6b7280;">%</span></div>
+        <div style="font-size:11px;color:#6b7280;">Enterprise scale</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px;">
+      <div style="font-size:12px;color:#374151;line-height:1.6;background:#f9fafb;border-radius:8px;padding:12px 14px;">
+        <b>Fraud Protection</b><br/>
+        <span style="color:#6b7280;">Chargeback insurance up to ⓒ 50K per dev/quarter</span>
+      </div>
+      <div style="font-size:12px;color:#374151;line-height:1.6;background:#f9fafb;border-radius:8px;padding:12px 14px;">
+        <b>Multi-Currency</b><br/>
+        <span style="color:#6b7280;">USD, EUR, GBP, INR, SGD, AED, JPY, AUD, USDC</span>
+      </div>
+      <div style="font-size:12px;color:#374151;line-height:1.6;background:#f9fafb;border-radius:8px;padding:12px 14px;">
+        <b>Tax Handled</b><br/>
+        <span style="color:#6b7280;">Auto VAT/GST collection across 38 jurisdictions</span>
+      </div>
+      <div style="font-size:12px;color:#374151;line-height:1.6;background:#f9fafb;border-radius:8px;padding:12px 14px;">
+        <b>Revenue Share</b><br/>
+        <span style="color:#6b7280;">Split royalties across co-authors automatically</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="font-size:12px;color:#9ca3af;text-align:center;padding:16px 0;">
+    AgentHub Revenue Engine · powered by Stripe Connect &amp; Wise · <a href="security.html" style="color:#be185d;text-decoration:none;font-weight:500;">View security →</a>
+  </div>
+
+</main>
+</body>
+</html>
