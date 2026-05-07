@@ -1,19 +1,10 @@
 {
+  "buildCommand": "echo 'Static site'",
+  "outputDirectory": "mockups",
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/", "destination": "/mockups/index.html" },
-    { "source": "/dashboard", "destination": "/mockups/dashboard.html" },
-    { "source": "/marketplace", "destination": "/mockups/marketplace.html" },
-    { "source": "/marketplace/:id", "destination": "/mockups/marketplace-detail.html" },
-    { "source": "/deployments", "destination": "/mockups/deployments.html" },
-    { "source": "/analytics", "destination": "/mockups/analytics.html" },
-    { "source": "/billing", "destination": "/mockups/billing.html" },
-    { "source": "/my-agents", "destination": "/mockups/my-agents.html" },
-    { "source": "/admin", "destination": "/mockups/admin.html" },
-    { "source": "/security", "destination": "/mockups/security.html" },
-    { "source": "/governance", "destination": "/mockups/governance.html" },
-    { "source": "/monetization", "destination": "/mockups/monetization.html" }
+    { "source": "/marketplace/:id", "destination": "/marketplace-detail" }
   ],
   "headers": [
     {

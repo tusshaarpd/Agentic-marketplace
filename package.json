@@ -1,0 +1,10 @@
+{
+  "name": "agentic-marketplace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AgentHub — Enterprise AI Agent Marketplace. Static HTML demo, deployed on Vercel.",
+  "scripts": {
+    "build": "echo 'Static site — no build needed'",
+    "dev": "npx serve mockups"
+  }
+}
