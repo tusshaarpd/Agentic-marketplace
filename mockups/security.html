@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Security & Trust — AgentHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f9fafb; color: #111827; }
+    .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; }
+    .badge { border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; }
+    .badge-success { background: #dcfce7; color: #15803d; }
+    .badge-warning { background: #fef9c3; color: #a16207; }
+    .badge-error   { background: #fee2e2; color: #dc2626; }
+    .badge-info    { background: #dbeafe; color: #1d4ed8; }
+    .badge-neutral { background: #f3f4f6; color: #374151; }
+    .badge-purple  { background: #f3e8ff; color: #7e22ce; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; font-size: 14px; text-decoration: none; color: #4b5563; border-radius: 8px; margin-bottom: 2px; }
+    .nav-item:hover { background: #f3f4f6; color: #111827; }
+    .nav-item.active { background: #ecfdf5; color: #059669; font-weight: 600; }
+    .btn { border-radius: 8px; padding: 8px 16px; font-size: 14px; font-weight: 500; border: none; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .btn-primary { background: #059669; color: white; }
+    .btn-secondary { background: white; border: 1px solid #d1d5db; color: #374151; }
+    .btn-danger { background: #dc2626; color: white; }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: #f9fafb; }
+    th { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; padding: 11px 16px; text-align: left; font-weight: 600; }
+    td { padding: 13px 16px; font-size: 13px; color: #374151; border-bottom: 1px solid #f3f4f6; }
+    tbody tr:hover { background: #fafafa; }
+    tbody tr:last-child td { border-bottom: none; }
+    .pill { font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 500; }
+    .progress-track { background: #e5e7eb; border-radius: 999px; height: 6px; overflow: hidden; }
+    .progress-fill  { background: #059669; border-radius: 999px; height: 100%; }
+    .check-row { display: flex; align-items: center; gap: 10px; padding: 12px 0; border-bottom: 1px solid #f3f4f6; font-size: 13.5px; }
+    .check-row:last-child { border-bottom: none; }
+    .ring { position: relative; width: 140px; height: 140px; }
+    .ring svg { transform: rotate(-90deg); }
+    .ring-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .feat-card { padding: 18px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; transition: box-shadow 0.15s, border-color 0.15s; }
+    .feat-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); border-color: #a7f3d0; }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside style="position:fixed;top:0;left:0;width:256px;height:100vh;background:white;border-right:1px solid #e5e7eb;display:flex;flex-direction:column;z-index:100;">
+  <div style="padding:20px;border-bottom:1px solid #e5e7eb;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;background:#059669;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;">A</div>
+      <span style="font-size:16px;font-weight:700;color:#111827;">AgentHub</span>
+    </div>
+  </div>
+  <nav style="flex:1;padding:12px 8px;overflow-y:auto;">
+    <a class="nav-item" href="dashboard.html">📊 Dashboard</a>
+    <a class="nav-item" href="marketplace.html">🛒 Marketplace</a>
+    <a class="nav-item" href="deployments.html">⚡ Deployments</a>
+    <a class="nav-item" href="analytics.html">📈 Analytics</a>
+    <a class="nav-item" href="billing.html">💳 Billing</a>
+    <div style="height:1px;background:#e5e7eb;margin:8px 4px;"></div>
+    <div style="font-size:11px;color:#9ca3af;padding:4px 12px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600;">Trust &amp; Control</div>
+    <a class="nav-item active" href="security.html">🛡️ Security &amp; Trust</a>
+    <a class="nav-item" href="governance.html">⚖️ Governance</a>
+    <a class="nav-item" href="monetization.html">💰 Monetization</a>
+    <div style="height:1px;background:#e5e7eb;margin:8px 4px;"></div>
+    <a class="nav-item" href="my-agents.html">🧩 My Agents</a>
+    <a class="nav-item" href="admin.html">🛡️ Admin</a>
+  </nav>
+  <div style="padding:16px;border-top:1px solid #e5e7eb;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:36px;height:36px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#059669;">RS</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#111827;">Rahul Singh</div>
+        <span class="pill" style="background:#f3e8ff;color:#7e22ce;">Security Admin</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- TOPBAR -->
+<header style="position:fixed;top:0;left:256px;right:0;height:64px;background:white;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:99;">
+  <div style="font-size:14px;color:#6b7280;">
+    <span style="color:#111827;font-weight:600;">Security &amp; Trust</span>
+    <span style="margin:0 6px;color:#d1d5db;">/</span>
+    <span>Posture Overview</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <span class="badge badge-success">● All systems secured</span>
+    <div style="width:36px;height:36px;background:#059669;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:13px;font-weight:600;">RS</div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main style="margin-left:256px;margin-top:64px;padding:32px;min-height:calc(100vh - 64px);">
+
+  <!-- Page Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+    <div>
+      <h1 style="font-size:24px;font-weight:700;color:#111827;margin-bottom:4px;">Security &amp; Trust Center</h1>
+      <p style="font-size:14px;color:#6b7280;">Continuous protection for every agent, prompt, and customer interaction across your fleet.</p>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-secondary">Download SOC 2 Report</button>
+      <button class="btn btn-primary">Run Security Audit</button>
+    </div>
+  </div>
+
+  <!-- Top Row: Posture Score + KPIs -->
+  <div style="display:grid;grid-template-columns:340px 1fr;gap:20px;margin-bottom:20px;">
+
+    <!-- Posture Score -->
+    <div class="card" style="padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <div style="font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;margin-bottom:14px;">Trust Posture Score</div>
+      <div class="ring">
+        <svg width="140" height="140">
+          <circle cx="70" cy="70" r="60" stroke="#e5e7eb" stroke-width="12" fill="none"/>
+          <circle cx="70" cy="70" r="60" stroke="#059669" stroke-width="12" fill="none"
+            stroke-dasharray="376.99" stroke-dashoffset="38" stroke-linecap="round"/>
+        </svg>
+        <div class="ring-text">
+          <span style="font-size:34px;font-weight:700;color:#111827;">94</span>
+          <span style="font-size:12px;color:#6b7280;">out of 100</span>
+        </div>
+      </div>
+      <div style="margin-top:14px;text-align:center;">
+        <span class="badge badge-success">Excellent</span>
+        <div style="font-size:12px;color:#6b7280;margin-top:6px;">Up 6 points vs last month</div>
+      </div>
+    </div>
+
+    <!-- KPI Grid -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+      <div class="card" style="padding:20px;">
+        <div style="font-size:12px;color:#6b7280;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;">Threats Blocked (30d)</div>
+        <div style="font-size:26px;font-weight:700;color:#111827;margin:8px 0 4px;">14,287</div>
+        <div style="font-size:12px;color:#16a34a;font-weight:500;">↑ 18% — proactive defense</div>
+      </div>
+      <div class="card" style="padding:20px;">
+        <div style="font-size:12px;color:#6b7280;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;">Prompt Injections Caught</div>
+        <div style="font-size:26px;font-weight:700;color:#111827;margin:8px 0 4px;">2,341</div>
+        <div style="font-size:12px;color:#dc2626;font-weight:500;">High severity: 47</div>
+      </div>
+      <div class="card" style="padding:20px;">
+        <div style="font-size:12px;color:#6b7280;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;">PII Auto-Redacted</div>
+        <div style="font-size:26px;font-weight:700;color:#111827;margin:8px 0 4px;">98,412</div>
+        <div style="font-size:12px;color:#16a34a;font-weight:500;">100% pre-egress</div>
+      </div>
+      <div class="card" style="padding:20px;">
+        <div style="font-size:12px;color:#6b7280;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;">Encryption Coverage</div>
+        <div style="font-size:26px;font-weight:700;color:#111827;margin:8px 0 4px;">100%</div>
+        <div style="font-size:12px;color:#6b7280;">AES-256 at rest · TLS 1.3 in transit</div>
+      </div>
+      <div class="card" style="padding:20px;">
+        <div style="font-size:12px;color:#6b7280;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;">MFA Enforcement</div>
+        <div style="font-size:26px;font-weight:700;color:#111827;margin:8px 0 4px;">100%</div>
+        <div style="font-size:12px;color:#16a34a;font-weight:500;">All 312 admin seats</div>
+      </div>
+      <div class="card" style="padding:20px;">
+        <div style="font-size:12px;color:#6b7280;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;">Mean Time To Contain</div>
+        <div style="font-size:26px;font-weight:700;color:#111827;margin:8px 0 4px;">3m 42s</div>
+        <div style="font-size:12px;color:#16a34a;font-weight:500;">↓ 41% MoM</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compliance Strip -->
+  <div class="card" style="padding:22px;margin-bottom:20px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <div>
+        <h2 style="font-size:16px;font-weight:600;color:#111827;">Compliance &amp; Certifications</h2>
+        <p style="font-size:13px;color:#6b7280;margin-top:2px;">Auto-mapped to your enterprise control frameworks. Evidence is collected continuously.</p>
+      </div>
+      <a href="#" style="font-size:13px;color:#059669;font-weight:500;text-decoration:none;">View evidence library →</a>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;">
+      <div style="border:1px solid #d1fae5;border-radius:10px;padding:14px;background:#ecfdf5;">
+        <div style="font-size:13px;font-weight:700;color:#065f46;">SOC 2 Type II</div>
+        <div style="font-size:11px;color:#059669;margin-top:2px;">✓ Verified · expires 2026-12</div>
+      </div>
+      <div style="border:1px solid #d1fae5;border-radius:10px;padding:14px;background:#ecfdf5;">
+        <div style="font-size:13px;font-weight:700;color:#065f46;">ISO 27001</div>
+        <div style="font-size:11px;color:#059669;margin-top:2px;">✓ Verified · 142 controls</div>
+      </div>
+      <div style="border:1px solid #d1fae5;border-radius:10px;padding:14px;background:#ecfdf5;">
+        <div style="font-size:13px;font-weight:700;color:#065f46;">GDPR</div>
+        <div style="font-size:11px;color:#059669;margin-top:2px;">✓ DPA &amp; SCCs in place</div>
+      </div>
+      <div style="border:1px solid #d1fae5;border-radius:10px;padding:14px;background:#ecfdf5;">
+        <div style="font-size:13px;font-weight:700;color:#065f46;">HIPAA</div>
+        <div style="font-size:11px;color:#059669;margin-top:2px;">✓ BAA available</div>
+      </div>
+      <div style="border:1px solid #fde68a;border-radius:10px;padding:14px;background:#fffbeb;">
+        <div style="font-size:13px;font-weight:700;color:#92400e;">EU AI Act</div>
+        <div style="font-size:11px;color:#a16207;margin-top:2px;">⏳ 4 controls in progress</div>
+      </div>
+      <div style="border:1px solid #d1fae5;border-radius:10px;padding:14px;background:#ecfdf5;">
+        <div style="font-size:13px;font-weight:700;color:#065f46;">NIST AI RMF</div>
+        <div style="font-size:11px;color:#059669;margin-top:2px;">✓ Mapped · 100%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Two column: Guardrails + Threat Feed -->
+  <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:20px;margin-bottom:20px;">
+
+    <!-- Guardrails -->
+    <div class="card" style="padding:22px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div>
+          <h2 style="font-size:16px;font-weight:600;color:#111827;">Active Guardrails</h2>
+          <p style="font-size:13px;color:#6b7280;margin-top:2px;">Layered defenses applied to every agent invocation.</p>
+        </div>
+        <button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;">Configure policies</button>
+      </div>
+
+      <div class="check-row">
+        <span style="width:22px;height:22px;background:#dcfce7;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#16a34a;font-size:13px;">✓</span>
+        <div style="flex:1;">
+          <div style="font-weight:600;color:#111827;">Prompt Injection Defense</div>
+          <div style="font-size:12px;color:#6b7280;">LLM-classifier + signature heuristics · 2,341 blocks last 30d</div>
+        </div>
+        <span class="badge badge-success">ENABLED</span>
+      </div>
+
+      <div class="check-row">
+        <span style="width:22px;height:22px;background:#dcfce7;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#16a34a;font-size:13px;">✓</span>
+        <div style="flex:1;">
+          <div style="font-weight:600;color:#111827;">PII / PHI Redaction</div>
+          <div style="font-size:12px;color:#6b7280;">Names, SSN, credit-cards, medical IDs masked pre-LLM and pre-egress</div>
+        </div>
+        <span class="badge badge-success">ENABLED</span>
+      </div>
+
+      <div class="check-row">
+        <span style="width:22px;height:22px;background:#dcfce7;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#16a34a;font-size:13px;">✓</span>
+        <div style="flex:1;">
+          <div style="font-weight:600;color:#111827;">Output Toxicity &amp; Bias Filter</div>
+          <div style="font-size:12px;color:#6b7280;">Threshold 0.85 · 64 violations auto-rewritten in last 24h</div>
+        </div>
+        <span class="badge badge-success">ENABLED</span>
+      </div>
+
+      <div class="check-row">
+        <span style="width:22px;height:22px;background:#dcfce7;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#16a34a;font-size:13px;">✓</span>
+        <div style="flex:1;">
+          <div style="font-weight:600;color:#111827;">Hallucination &amp; Grounding Score</div>
+          <div style="font-size:12px;color:#6b7280;">Faithfulness vs source &gt; 0.92 required for high-risk agents</div>
+        </div>
+        <span class="badge badge-success">ENABLED</span>
+      </div>
+
+      <div class="check-row">
+        <span style="width:22px;height:22px;background:#dcfce7;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#16a34a;font-size:13px;">✓</span>
+        <div style="flex:1;">
+          <div style="font-weight:600;color:#111827;">Tool-Use &amp; Egress Allowlist</div>
+          <div style="font-size:12px;color:#6b7280;">Agents can only call pre-approved tools/domains. SSRF &amp; DNS pinning enforced.</div>
+        </div>
+        <span class="badge badge-success">ENABLED</span>
+      </div>
+
+      <div class="check-row">
+        <span style="width:22px;height:22px;background:#dcfce7;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#16a34a;font-size:13px;">✓</span>
+        <div style="flex:1;">
+          <div style="font-weight:600;color:#111827;">Sandboxed Execution (gVisor)</div>
+          <div style="font-size:12px;color:#6b7280;">Every agent runs in an isolated micro-VM with no host filesystem access</div>
+        </div>
+        <span class="badge badge-success">ENABLED</span>
+      </div>
+
+      <div class="check-row">
+        <span style="width:22px;height:22px;background:#dcfce7;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#16a34a;font-size:13px;">✓</span>
+        <div style="flex:1;">
+          <div style="font-weight:600;color:#111827;">Rate Limiting &amp; Cost Caps</div>
+          <div style="font-size:12px;color:#6b7280;">Per-tenant RPS, daily token, and monthly spend ceilings auto-enforced</div>
+        </div>
+        <span class="badge badge-success">ENABLED</span>
+      </div>
+
+      <div class="check-row">
+        <span style="width:22px;height:22px;background:#fef9c3;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#a16207;font-size:13px;">!</span>
+        <div style="flex:1;">
+          <div style="font-weight:600;color:#111827;">Differential Privacy on Telemetry</div>
+          <div style="font-size:12px;color:#6b7280;">Beta · ε = 1.2 — recommended for healthcare &amp; finance tenants</div>
+        </div>
+        <span class="badge badge-warning">BETA</span>
+      </div>
+
+      <div class="check-row">
+        <span style="width:22px;height:22px;background:#dcfce7;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#16a34a;font-size:13px;">✓</span>
+        <div style="flex:1;">
+          <div style="font-weight:600;color:#111827;">Kill-Switch &amp; Auto-Quarantine</div>
+          <div style="font-size:12px;color:#6b7280;">Anomaly &gt; 3σ triggers freeze; one-click revoke for any agent or tenant</div>
+        </div>
+        <span class="badge badge-success">ARMED</span>
+      </div>
+    </div>
+
+    <!-- Threat Feed -->
+    <div class="card" style="padding:22px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div>
+          <h2 style="font-size:16px;font-weight:600;color:#111827;">Live Threat Feed</h2>
+          <p style="font-size:13px;color:#6b7280;margin-top:2px;">Last 24 hours · auto-refresh every 30s</p>
+        </div>
+        <span class="badge badge-error">7 OPEN</span>
+      </div>
+
+      <div style="border-left:3px solid #dc2626;padding:10px 14px;background:#fef2f2;border-radius:0 8px 8px 0;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:13px;font-weight:600;color:#991b1b;">Prompt-injection attempt</span>
+          <span style="font-size:11px;color:#9ca3af;">2m ago</span>
+        </div>
+        <div style="font-size:12px;color:#7f1d1d;">Agent: <b>NeuralSummarizer Pro</b> · Tenant: acme-corp · Blocked at gateway</div>
+      </div>
+
+      <div style="border-left:3px solid #f59e0b;padding:10px 14px;background:#fffbeb;border-radius:0 8px 8px 0;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:13px;font-weight:600;color:#92400e;">Anomalous tool-call rate</span>
+          <span style="font-size:11px;color:#9ca3af;">11m ago</span>
+        </div>
+        <div style="font-size:12px;color:#78350f;">Agent: <b>FraudShield ML</b> · Spike to 412 RPS · auto-throttled</div>
+      </div>
+
+      <div style="border-left:3px solid #f59e0b;padding:10px 14px;background:#fffbeb;border-radius:0 8px 8px 0;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:13px;font-weight:600;color:#92400e;">PII leak attempted in output</span>
+          <span style="font-size:11px;color:#9ca3af;">37m ago</span>
+        </div>
+        <div style="font-size:12px;color:#78350f;">3 SSNs masked before egress · Tenant: globex</div>
+      </div>
+
+      <div style="border-left:3px solid #dc2626;padding:10px 14px;background:#fef2f2;border-radius:0 8px 8px 0;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:13px;font-weight:600;color:#991b1b;">Egress to non-allowlisted domain</span>
+          <span style="font-size:11px;color:#9ca3af;">1h ago</span>
+        </div>
+        <div style="font-size:12px;color:#7f1d1d;">Agent: <b>WebResearch v3</b> · target: pastebin.com · Denied</div>
+      </div>
+
+      <div style="border-left:3px solid #2563eb;padding:10px 14px;background:#eff6ff;border-radius:0 8px 8px 0;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:13px;font-weight:600;color:#1e40af;">Jailbreak signature update</span>
+          <span style="font-size:11px;color:#9ca3af;">2h ago</span>
+        </div>
+        <div style="font-size:12px;color:#1e3a8a;">147 new patterns deployed to all agents (auto-rollout)</div>
+      </div>
+
+      <div style="border-left:3px solid #f59e0b;padding:10px 14px;background:#fffbeb;border-radius:0 8px 8px 0;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:13px;font-weight:600;color:#92400e;">Excessive token usage</span>
+          <span style="font-size:11px;color:#9ca3af;">4h ago</span>
+        </div>
+        <div style="font-size:12px;color:#78350f;">Tenant <b>nova-finance</b> hit 80% of monthly cap · alert sent</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audit Log Table -->
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px;">
+    <div style="padding:18px 22px;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <h2 style="font-size:16px;font-weight:600;color:#111827;">Tamper-Evident Audit Log</h2>
+        <p style="font-size:13px;color:#6b7280;margin-top:2px;">Hash-chained, write-once. Streamed to your SIEM. Retention: 7 years.</p>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;">Filter</button>
+        <button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;">Export CSV</button>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Time (UTC)</th>
+          <th>Actor</th>
+          <th>Event</th>
+          <th>Resource</th>
+          <th>IP / Source</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-family:'Courier New',monospace;color:#6b7280;">2026-05-07 09:41:22</td>
+          <td>arjun.mehta@neuralai.io</td>
+          <td>agent.publish</td>
+          <td>NeuralSummarizer Pro v2.4.2</td>
+          <td>103.21.x.x · Mumbai</td>
+          <td><span class="badge badge-success">SUCCESS</span></td>
+        </tr>
+        <tr>
+          <td style="font-family:'Courier New',monospace;color:#6b7280;">2026-05-07 09:38:14</td>
+          <td>system.gateway</td>
+          <td>policy.injection_blocked</td>
+          <td>req_xK9mP2qZ</td>
+          <td>52.13.x.x · acme-corp</td>
+          <td><span class="badge badge-error">BLOCKED</span></td>
+        </tr>
+        <tr>
+          <td style="font-family:'Courier New',monospace;color:#6b7280;">2026-05-07 09:32:07</td>
+          <td>priya.sharma@agenthub.io</td>
+          <td>rbac.role_change</td>
+          <td>user:dev-3942 → REVIEWER</td>
+          <td>10.0.x.x · VPN</td>
+          <td><span class="badge badge-success">SUCCESS</span></td>
+        </tr>
+        <tr>
+          <td style="font-family:'Courier New',monospace;color:#6b7280;">2026-05-07 09:18:55</td>
+          <td>system.scanner</td>
+          <td>secret.exposure_detected</td>
+          <td>agent-0214 / config.env</td>
+          <td>internal</td>
+          <td><span class="badge badge-warning">QUARANTINED</span></td>
+        </tr>
+        <tr>
+          <td style="font-family:'Courier New',monospace;color:#6b7280;">2026-05-07 09:02:31</td>
+          <td>rahul.singh@agenthub.io</td>
+          <td>agent.kill_switch</td>
+          <td>WebResearch v3 (all tenants)</td>
+          <td>10.0.x.x · VPN</td>
+          <td><span class="badge badge-error">REVOKED</span></td>
+        </tr>
+        <tr>
+          <td style="font-family:'Courier New',monospace;color:#6b7280;">2026-05-07 08:55:09</td>
+          <td>system.compliance</td>
+          <td>data_residency.enforced</td>
+          <td>tenant: zurich-bank → eu-central-1</td>
+          <td>internal</td>
+          <td><span class="badge badge-success">SUCCESS</span></td>
+        </tr>
+        <tr>
+          <td style="font-family:'Courier New',monospace;color:#6b7280;">2026-05-07 08:41:20</td>
+          <td>okta.scim</td>
+          <td>auth.mfa_required</td>
+          <td>user:contractor-117</td>
+          <td>185.42.x.x · London</td>
+          <td><span class="badge badge-success">ENFORCED</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Defense-in-Depth Architecture -->
+  <div class="card" style="padding:22px;margin-bottom:20px;">
+    <h2 style="font-size:16px;font-weight:600;color:#111827;">Defense-in-Depth Pipeline</h2>
+    <p style="font-size:13px;color:#6b7280;margin:2px 0 18px;">Every request passes through six independent layers before any response leaves the perimeter.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;align-items:stretch;">
+      <div class="feat-card" style="background:#ecfdf5;border-color:#a7f3d0;">
+        <div style="font-size:24px;margin-bottom:6px;">🔐</div>
+        <div style="font-weight:600;color:#065f46;font-size:13px;">1. Identity</div>
+        <div style="font-size:11.5px;color:#047857;margin-top:4px;line-height:1.5;">SSO/SAML, SCIM, mTLS, MFA, short-lived JWTs</div>
+      </div>
+      <div class="feat-card" style="background:#ecfdf5;border-color:#a7f3d0;">
+        <div style="font-size:24px;margin-bottom:6px;">🛂</div>
+        <div style="font-weight:600;color:#065f46;font-size:13px;">2. Input Filter</div>
+        <div style="font-size:11.5px;color:#047857;margin-top:4px;line-height:1.5;">Injection detection, PII redaction, schema validation</div>
+      </div>
+      <div class="feat-card" style="background:#ecfdf5;border-color:#a7f3d0;">
+        <div style="font-weight:600;color:#065f46;font-size:13px;"><span style="font-size:24px;display:block;margin-bottom:6px;">📦</span>3. Sandbox</div>
+        <div style="font-size:11.5px;color:#047857;margin-top:4px;line-height:1.5;">gVisor micro-VM, read-only FS, capped resources</div>
+      </div>
+      <div class="feat-card" style="background:#ecfdf5;border-color:#a7f3d0;">
+        <div style="font-size:24px;margin-bottom:6px;">🧰</div>
+        <div style="font-weight:600;color:#065f46;font-size:13px;">4. Tool Gate</div>
+        <div style="font-size:11.5px;color:#047857;margin-top:4px;line-height:1.5;">Allowlisted tools, signed manifests, scoped tokens</div>
+      </div>
+      <div class="feat-card" style="background:#ecfdf5;border-color:#a7f3d0;">
+        <div style="font-size:24px;margin-bottom:6px;">🧪</div>
+        <div style="font-weight:600;color:#065f46;font-size:13px;">5. Output Filter</div>
+        <div style="font-size:11.5px;color:#047857;margin-top:4px;line-height:1.5;">Toxicity, bias, hallucination grounding, PII</div>
+      </div>
+      <div class="feat-card" style="background:#ecfdf5;border-color:#a7f3d0;">
+        <div style="font-size:24px;margin-bottom:6px;">📜</div>
+        <div style="font-weight:600;color:#065f46;font-size:13px;">6. Audit</div>
+        <div style="font-size:11.5px;color:#047857;margin-top:4px;line-height:1.5;">Immutable hash-chain, SIEM stream, 7y retention</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RBAC + Data Residency -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+    <div class="card" style="padding:22px;">
+      <h2 style="font-size:16px;font-weight:600;color:#111827;">Role-Based Access (RBAC)</h2>
+      <p style="font-size:13px;color:#6b7280;margin:2px 0 14px;">Fine-grained permissions across 312 enterprise seats.</p>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6;">
+        <div><span class="badge badge-purple">SUPER ADMIN</span></div>
+        <div style="font-size:13px;color:#374151;font-weight:500;">4 users</div>
+        <div style="width:140px;"><div class="progress-track"><div class="progress-fill" style="width:1.3%;background:#7e22ce;"></div></div></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6;">
+        <div><span class="badge badge-error">SECURITY OFFICER</span></div>
+        <div style="font-size:13px;color:#374151;font-weight:500;">8 users</div>
+        <div style="width:140px;"><div class="progress-track"><div class="progress-fill" style="width:2.6%;background:#dc2626;"></div></div></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6;">
+        <div><span class="badge badge-info">DEVELOPER</span></div>
+        <div style="font-size:13px;color:#374151;font-weight:500;">142 users</div>
+        <div style="width:140px;"><div class="progress-track"><div class="progress-fill" style="width:45.5%;background:#2563eb;"></div></div></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6;">
+        <div><span class="badge badge-warning">REVIEWER</span></div>
+        <div style="font-size:13px;color:#374151;font-weight:500;">21 users</div>
+        <div style="width:140px;"><div class="progress-track"><div class="progress-fill" style="width:6.7%;background:#a16207;"></div></div></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6;">
+        <div><span class="badge badge-success">CONSUMER</span></div>
+        <div style="font-size:13px;color:#374151;font-weight:500;">128 users</div>
+        <div style="width:140px;"><div class="progress-track"><div class="progress-fill" style="width:41%;background:#059669;"></div></div></div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;">
+        <div><span class="badge badge-neutral">READ-ONLY AUDITOR</span></div>
+        <div style="font-size:13px;color:#374151;font-weight:500;">9 users</div>
+        <div style="width:140px;"><div class="progress-track"><div class="progress-fill" style="width:2.9%;background:#6b7280;"></div></div></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:22px;">
+      <h2 style="font-size:16px;font-weight:600;color:#111827;">Data Residency &amp; Sovereignty</h2>
+      <p style="font-size:13px;color:#6b7280;margin:2px 0 14px;">Tenant data stays in the region you choose. Cross-border traffic is blocked at the routing layer.</p>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6;">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#111827;">🇺🇸 us-east-1 (Virginia)</div>
+          <div style="font-size:11px;color:#6b7280;">FedRAMP-ready · 142 tenants</div>
+        </div>
+        <span class="badge badge-success">HEALTHY</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6;">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#111827;">🇪🇺 eu-central-1 (Frankfurt)</div>
+          <div style="font-size:11px;color:#6b7280;">GDPR · Schrems II compliant · 96 tenants</div>
+        </div>
+        <span class="badge badge-success">HEALTHY</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6;">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#111827;">🇮🇳 ap-south-1 (Mumbai)</div>
+          <div style="font-size:11px;color:#6b7280;">DPDP Act · 58 tenants</div>
+        </div>
+        <span class="badge badge-success">HEALTHY</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f3f4f6;">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#111827;">🇸🇬 ap-southeast-1 (Singapore)</div>
+          <div style="font-size:11px;color:#6b7280;">PDPA · 34 tenants</div>
+        </div>
+        <span class="badge badge-success">HEALTHY</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#111827;">🇦🇺 ap-southeast-2 (Sydney)</div>
+          <div style="font-size:11px;color:#6b7280;">IRAP-aligned · provisioning</div>
+        </div>
+        <span class="badge badge-warning">DEPLOYING</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer note -->
+  <div style="font-size:12px;color:#9ca3af;text-align:center;padding:16px 0;">
+    Continuous monitoring powered by AgentHub Trust Engine · last refresh 12s ago · <a href="governance.html" style="color:#059669;text-decoration:none;font-weight:500;">View governance →</a>
+  </div>
+
+</main>
+</body>
+</html>
